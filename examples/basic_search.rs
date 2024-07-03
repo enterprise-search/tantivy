@@ -192,7 +192,7 @@ fn main() -> tantivy::Result<()> {
     // `QueryParser` may fail if the query is not in the right
     // format. For user facing applications, this can be a problem.
     // A ticket has been opened regarding this problem.
-    let query = query_parser.parse_query("sea whale")?;
+    let query = query_parser.parse_query("sea fish")?;
 
     // A query defines a set of documents, as
     // well as the way they should be scored.
@@ -216,14 +216,14 @@ fn main() -> tantivy::Result<()> {
     // Since the body field was not configured as stored,
     // the document returned will only contain
     // a title.
-    for (_score, doc_address) in top_docs {
+    for (score, doc_address) in top_docs {
         let retrieved_doc: TantivyDocument = searcher.doc(doc_address)?;
-        println!("{}", retrieved_doc.to_json(&schema));
+        println!("score: {score}, doc: {}", retrieved_doc.to_json(&schema));
     }
 
     // We can also get an explanation to understand
     // how a found document got its score.
-    let query = query_parser.parse_query("title:sea^20 body:whale^70")?;
+    let query = query_parser.parse_query("title:sea^20 body:fish^70")?;
 
     let (_score, doc_address) = searcher
         .search(&query, &TopDocs::with_limit(1))?
